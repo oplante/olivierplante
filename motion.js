@@ -28,6 +28,10 @@
     var slides = root.querySelectorAll(".carousel-frame img");
     var dots = root.querySelectorAll(".carousel-nav button");
     var cap = root.querySelector("figcaption");
+    var count = slides.length;
+    if (!count) return;
+    index = (index + count) % count;
+    root.setAttribute("data-index", String(index));
     slides.forEach(function (img, i) {
       var on = i === index;
       img.classList.toggle("is-on", on);
@@ -43,13 +47,28 @@
     }
   }
 
-  document.querySelectorAll("[data-carousel]").forEach(function (root) {
-    var dots = root.querySelectorAll(".carousel-nav button");
-    show(root, 0);
-    dots.forEach(function (btn, i) {
-      btn.addEventListener("click", function () {
-        show(root, i);
+  function initCarousels() {
+    document.querySelectorAll("[data-carousel]").forEach(function (root) {
+      var slides = root.querySelectorAll(".carousel-frame img");
+      show(root, 0);
+      root.querySelectorAll(".carousel-nav button").forEach(function (btn, i) {
+        btn.addEventListener("click", function () {
+          show(root, i);
+        });
+      });
+      root.querySelectorAll(".carousel-arrow").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var current = parseInt(root.getAttribute("data-index") || "0", 10);
+          var dir = parseInt(btn.getAttribute("data-dir") || "1", 10);
+          show(root, current + dir);
+        });
       });
     });
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCarousels);
+  } else {
+    initCarousels();
+  }
 })();
