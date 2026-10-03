@@ -246,6 +246,19 @@ h3 {
 .shot {
   margin: 0;
 }
+.portrait {
+  margin: 1.75rem 0 0;
+  width: 100%;
+}
+
+.portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  max-height: none;
+}
+
 
 .shot img {
   display: block;
