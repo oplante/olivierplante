@@ -270,7 +270,7 @@ h3 {
   height: 15.5rem;
   object-fit: cover;
   object-position: 18% 28%;
-  border-radius: 0;
+  border-radius: var(--radius);
 }
 
 
