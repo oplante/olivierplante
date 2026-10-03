@@ -246,17 +246,31 @@ h3 {
 .shot {
   margin: 0;
 }
+.who {
+  margin: 0 0 0.55rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.hero h1 {
+  font-size: clamp(1.85rem, 3.1vw, 2.75rem);
+  line-height: 1.12;
+}
+
 .portrait {
-  margin: 1.75rem 0 0;
-  width: 100%;
+  margin: 0;
+  justify-self: end;
+  width: min(100%, 17.5rem);
 }
 
 .portrait img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 15.5rem;
+  object-fit: cover;
+  object-position: 18% 28%;
   border-radius: 0;
-  max-height: none;
 }
 
 
@@ -389,6 +403,16 @@ html.motion.ready [data-enter] {
   .hero .shot img {
     max-height: none;
     object-fit: initial;
+  }
+
+  .portrait {
+    justify-self: start;
+    width: min(15rem, 78%);
+    margin-top: 0.25rem;
+  }
+
+  .portrait img {
+    height: 13.5rem;
   }
 
   h1 {
