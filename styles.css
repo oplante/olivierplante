@@ -207,7 +207,7 @@ a {
   grid-template-columns: 2.2rem 1fr;
   align-items: baseline;
   column-gap: 0.85rem;
-  padding: 0.72rem 0 0.85rem;
+  padding: 2.16rem 0 0.85rem;
   color: var(--ink);
   text-decoration: none;
 }
@@ -286,6 +286,10 @@ a {
   width: min(40rem, calc(100% - 2.75rem));
   margin-inline: auto;
   padding: 1.75rem 0 4.5rem;
+}
+
+.case {
+  padding-top: 5.25rem;
 }
 
 .case-num {
