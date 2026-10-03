@@ -246,13 +246,6 @@ h3 {
 .shot {
   margin: 0;
 }
-.who {
-  margin: 0 0 0.55rem;
-  font-size: 1.05rem;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
 .hero h1 {
   font-size: clamp(1.85rem, 3.1vw, 2.75rem);
   line-height: 1.12;
@@ -425,6 +418,14 @@ html.motion.ready [data-enter] {
 
   .mark {
     margin-top: 0;
+  }
+
+  .mark.fleksy {
+    justify-self: center;
+  }
+
+  .mark.fleksy img {
+    margin-inline: auto;
   }
 
   .wrap,
