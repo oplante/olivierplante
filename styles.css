@@ -1,0 +1,368 @@
+/* Olivier Plante. One paper theme, one accent, square corners. */
+
+:root {
+  --paper: #f4f0e6;
+  --ink: #1c1915;
+  --muted: #5e584e;
+  --line: #ddd6c8;
+  --accent: #8d3d2f;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --serif: "Source Serif 4", "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.55;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #edd9d4;
+  color: var(--ink);
+}
+
+.wrap {
+  width: min(40rem, calc(100% - 2.5rem));
+  margin-left: max(1.25rem, 8vw);
+  margin-right: auto;
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  background: var(--paper);
+  color: var(--accent);
+  padding: 0.4rem 0.6rem;
+}
+
+.skip:focus {
+  top: 0.5rem;
+  z-index: 2;
+}
+
+.nav {
+  height: 4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-inner {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nav nav {
+  display: flex;
+  gap: 1.15rem;
+}
+
+.brand,
+.nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.95rem;
+  line-height: 1;
+  display: inline-block;
+}
+
+.brand {
+  font-weight: 560;
+}
+
+.hero {
+  padding: 2.75rem 0 1.25rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 6vw, 4.25rem);
+  font-weight: 560;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.dek {
+  margin: 0.85rem 0 0;
+  max-width: 40rem;
+  font-size: 1.2rem;
+  line-height: 1.35;
+}
+
+.where {
+  margin: 0.35rem 0 0;
+  font-size: 1.05rem;
+}
+
+.cta-row {
+  margin: 1.35rem 0 0;
+}
+
+.cta {
+  display: inline-block;
+  padding: 0.62rem 0.95rem;
+  border: 1px solid var(--accent);
+  color: var(--paper);
+  background: var(--accent);
+  text-decoration: none;
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 560;
+}
+
+.arc {
+  padding-bottom: 0.5rem;
+}
+
+.arc p:first-child {
+  font-size: 1.28rem;
+  line-height: 1.4;
+}
+
+p {
+  margin: 0 0 0.95rem;
+  text-wrap: pretty;
+}
+
+h2 {
+  margin: 3.1rem 0 0.35rem;
+  font-size: 1.45rem;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.28rem;
+  font-weight: 560;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.timeline {
+  margin-top: 0.85rem;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: 10.5rem 1fr;
+  column-gap: 1.35rem;
+  padding: 1.35rem 0 1.45rem;
+  border-top: 1px solid var(--line);
+}
+
+.entry.now {
+  border-top-color: var(--accent);
+}
+
+.meta {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.meta time {
+  display: block;
+  color: var(--ink);
+  margin-bottom: 0.15rem;
+}
+
+.entry.now .meta time {
+  color: var(--accent);
+}
+
+.role {
+  margin: 0.2rem 0 0.65rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.study p,
+#contact p,
+footer p {
+  max-width: 38rem;
+}
+
+cite {
+  font-style: italic;
+}
+
+.life {
+  margin-top: 1.35rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+.cta,
+.nav a,
+.brand {
+  transition: transform 160ms var(--ease-out);
+}
+
+.cta:active,
+.nav a:active,
+.brand:active {
+  transform: scale(0.97);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+footer {
+  padding: 2.5rem 0 3.5rem;
+}
+
+footer p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+html.motion [data-enter] {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+html.motion.ready [data-enter] {
+  opacity: 1;
+  transform: none;
+  transition-property: opacity, transform;
+  transition-duration: 240ms;
+  transition-timing-function: var(--ease-out);
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding-top: 1.75rem;
+  }
+
+  .entry {
+    grid-template-columns: 1fr;
+    row-gap: 0.35rem;
+  }
+
+  .meta {
+    margin-top: 0;
+  }
+
+  h1 {
+    font-size: 2.45rem;
+  }
+
+  .dek {
+    font-size: 1.08rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav,
+  .nav-inner {
+    height: 3.5rem;
+  }
+
+  .brand,
+  .nav a {
+    font-size: 0.82rem;
+  }
+
+  .nav nav {
+    gap: 0.7rem;
+  }
+
+  .wrap {
+    width: calc(100% - 2rem);
+    margin-left: 1rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav a:hover,
+  .brand:hover {
+    color: var(--accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.motion [data-enter],
+  html.motion.ready [data-enter] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .cta,
+  .nav a,
+  .brand,
+  .cta:active,
+  .nav a:active,
+  .brand:active,
+  .cta:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+  }
+
+  .nav,
+  .skip,
+  .cta-row {
+    display: none;
+  }
+
+  .wrap {
+    width: 100%;
+    margin: 0;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  #contact a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.9em;
+  }
+
+  .entry {
+    break-inside: avoid;
+  }
+
+  .entry.now .meta time,
+  footer p {
+    color: #000;
+  }
+}
