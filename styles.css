@@ -382,6 +382,87 @@ html.motion.ready [data-enter] {
   padding-bottom: 4rem;
 }
 
+
+.side,
+.role > .carousel {
+  width: min(100%, 17.5rem);
+  justify-self: end;
+}
+
+.carousel {
+  margin: 0.7rem 0 0;
+}
+
+.role > .carousel {
+  margin-top: 0;
+}
+
+.carousel-frame {
+  position: relative;
+  height: 10.5rem;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: #ebe6dc;
+}
+
+.carousel-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  opacity: 0;
+  border-radius: 0;
+}
+
+.carousel-frame img.is-on {
+  opacity: 1;
+}
+
+.carousel-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
+.carousel-nav button {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: #cfc6b8;
+  cursor: pointer;
+}
+
+.carousel-nav button[aria-current="true"] {
+  background: var(--accent);
+}
+
+.carousel-nav button {
+  transition: transform 160ms var(--ease-out);
+}
+
+.carousel-nav button:active {
+  transform: scale(0.97);
+}
+
+.carousel figcaption {
+  margin-top: 0.4rem;
+}
+
+.marks.schools {
+  margin-top: 1.15rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .carousel-frame img {
+    transition: opacity 240ms var(--ease-out);
+  }
+}
+
 @media (max-width: 760px) {
   .split,
   .role {
@@ -425,6 +506,12 @@ html.motion.ready [data-enter] {
   }
 
   .mark.fleksy img {
+    margin-inline: auto;
+  }
+
+  .side,
+  .role > .carousel {
+    justify-self: center;
     margin-inline: auto;
   }
 
@@ -474,7 +561,10 @@ html.motion.ready [data-enter] {
   .brand,
   .cta:active,
   .nav a:active,
-  .brand:active {
+  .brand:active,
+  .carousel-nav button,
+  .carousel-nav button:active,
+  .carousel-frame img {
     transition: none;
     transform: none;
   }
