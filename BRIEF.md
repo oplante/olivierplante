@@ -6,7 +6,7 @@ Audience: hiring managers, founders, and engineers who want the career in one si
 
 Vibe: distinctive, calm, editorial. A document you can read, not a campaign.
 
-Constraints: facts only from the CV (October 2026). No phone number. No Snap product detail beyond the CV. Static files for GitHub Pages. No build step. No paid font. No photograph exists in the CV, so the hero is typographic. A stock portrait would be a lie.
+Constraints: facts only from the CV (October 2026). No phone number. No Snap product detail beyond the CV. Static files for GitHub Pages. No build step. No paid font. No stock photos and no invented logos. Real workshop photos from innovapartners.net are allowed.
 
 ## Dials
 
@@ -26,4 +26,4 @@ Local-business trust dials are the wrong tool here. This is a person's career, n
 
 ## Page shape
 
-Hero, first screen: name, one line of what he does and where, email control. Narrative arc under that. Work as a stacked timeline (not equal cards). Study, languages, and awards in a different layout. Contact is the address, not a form. Closing line: built from his CV, October 2026.
+Hero, first screen: name, one line of what he does and where, email control. Narrative arc under that. Work as image-beside-text rows (not equal cards). Study, languages, and awards in a different layout. Contact is the address, not a form. Do not add a CV credit line.
