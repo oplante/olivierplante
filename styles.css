@@ -483,6 +483,10 @@ a {
 }
 
 .follow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.75rem;
   margin-top: 2.4rem;
 }
 
