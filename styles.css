@@ -435,6 +435,53 @@ a {
   line-height: 1.15;
 }
 
+.record-intro {
+  padding-bottom: 0;
+}
+
+.record-photos {
+  width: min(68rem, calc(100% - 2.75rem));
+  margin: 2.75rem auto 0;
+  padding-bottom: 4.5rem;
+}
+
+.record-photos > * + * {
+  margin-top: 1.65rem;
+}
+
+.record-photos figure {
+  margin: 0;
+}
+
+.record-photos img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.record-photos figcaption {
+  margin-top: 0.45rem;
+  max-width: 40rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.record-doc {
+  width: min(26rem, 100%);
+}
+
+.record-inset {
+  width: min(28rem, 100%);
+}
+
+.record-split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  gap: 1.15rem 1.25rem;
+  align-items: start;
+}
+
 .follow {
   margin-top: 2.4rem;
 }
@@ -527,11 +574,21 @@ html.motion.ready [data-enter] {
   .shots.two-up {
     display: flex;
   }
+
+  .record-photos {
+    width: calc(100% - 2rem);
+    margin-top: 2.25rem;
+  }
+
+  .record-split {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 380px) {
   .nav-inner,
-  .frame {
+  .frame,
+  .record-photos {
     width: calc(100% - 1.25rem);
   }
 
