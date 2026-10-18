@@ -1,24 +1,806 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Olivier Plante — Product Manager</title>
-    <meta
-      name="description"
-      content="Olivier Plante is a product manager in London working on input, operating systems, and human-computer interfaces. He co-founded Fleksy."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <script type="module" crossorigin src="/olivierplante/assets/index-DsGxG_0i.js"></script>
-    <link rel="stylesheet" crossorigin href="/olivierplante/assets/index-DgLKDSQk.css">
-  </head>
-  <body>
-    <img src="https://librecounter.org/counter.svg" referrerPolicy="unsafe-url" width="0" height="0" alt="" style="position:absolute;width:0;height:0;border:0" />
-    <div id="root"></div>
-  </body>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Olivier Plante — Product Manager</title>
+<meta name="description" content="Olivier Plante is a product manager in London working on input, operating systems, and human-computer interfaces. He co-founded Fleksy." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#f2efe8;
+  --paper-2:#e9e4d8;
+  --ink:#181618;
+  --ink-60:rgba(24,22,24,.62);
+  --ink-30:rgba(24,22,24,.34);
+  --line:rgba(24,22,24,.16);
+  --accent:#db3356;
+  --dark:#131113;
+  --dark-paper:#f2efe8;
+  --dark-60:rgba(242,239,232,.6);
+  --dark-line:rgba(242,239,232,.16);
+  --font-display:"Fraunces",Georgia,serif;
+  --font-body:"Inter",-apple-system,sans-serif;
+  --font-mono:"IBM Plex Mono",monospace;
+  --gutter:clamp(1.25rem,4vw,4rem);
+  --ease:cubic-bezier(.62,.05,.01,.99);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scrollbar-width:thin;scrollbar-color:var(--ink-30) transparent}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--font-body);font-size:1rem;line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+::selection{background:var(--accent);color:var(--paper)}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+@media (hover:hover){ body,a,button{cursor:none} }
+
+/* ---------- grain ---------- */
+.grain{position:fixed;inset:-100%;z-index:2000;pointer-events:none;opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 8s steps(10) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-2%)}80%{transform:translate(3%,3%)}}
+
+/* ---------- cursor ---------- */
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;z-index:3000;pointer-events:none;border-radius:50%;
+  transform:translate(-50%,-50%);will-change:transform}
+.cursor-dot{width:6px;height:6px;background:var(--accent)}
+.cursor-ring{width:28px;height:28px;border:1px solid rgba(219,51,86,.65);
+  transition:width .25s var(--ease),height .25s var(--ease),opacity .25s,background .25s}
+.cursor-ring.is-hover{width:48px;height:48px;background:rgba(219,51,86,.07)}
+.cursor-ring.is-down{width:20px;height:20px}
+@media (hover:none){.cursor-dot,.cursor-ring{display:none}}
+
+/* ---------- loader ---------- */
+.loader{position:fixed;inset:0;z-index:1500;background:var(--dark);color:var(--dark-paper);
+  display:flex;align-items:center;justify-content:center;flex-direction:column}
+.loader__name{font-family:var(--font-display);font-weight:300;font-style:italic;
+  font-size:clamp(1.6rem,4vw,3rem);overflow:hidden}
+.loader__name span{display:block;transform:translateY(110%)}
+.loader__count{position:absolute;bottom:2rem;right:var(--gutter);
+  font-family:var(--font-mono);font-size:.8rem;letter-spacing:.15em;color:var(--dark-60)}
+.loader__bar{position:absolute;bottom:0;left:0;height:2px;width:100%;background:var(--dark-line)}
+.loader__bar i{display:block;height:100%;width:0;background:var(--accent)}
+.loader__panels{position:fixed;inset:0;z-index:1400;pointer-events:none;display:flex}
+.loader__panels div{flex:1;background:var(--paper-2);transform:scaleY(1);transform-origin:top}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem var(--gutter);mix-blend-mode:difference;color:#fff;
+  transition:background .45s var(--ease),box-shadow .45s var(--ease),padding .45s var(--ease);
+  border-bottom:1px solid transparent}
+.nav.is-scrolled{mix-blend-mode:normal;color:var(--ink);
+  background:rgba(242,239,232,.82);
+  -webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);
+  border-bottom-color:var(--line);padding:.85rem var(--gutter)}
+.nav__name{font-family:var(--font-display);font-weight:500;font-size:1.05rem;letter-spacing:.01em}
+.nav__links{display:flex;gap:2rem;align-items:center}
+.nav__links a{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;position:relative;padding:.2rem 0}
+.nav__links a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+.nav__links a:hover::after{transform:scaleX(1);transform-origin:left}
+.nav__cta{border:1px solid currentColor;border-radius:99px;padding:.45rem 1.1rem!important;transition:background .35s,color .35s,border-color .35s!important}
+.nav__cta::after{display:none}
+.nav__cta:hover{background:#fff;color:#000;border-color:#fff}
+.nav.is-scrolled .nav__cta:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+@media (max-width:760px){.nav__links a:not(.nav__cta){display:none}}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 var(--gutter) 4vh;position:relative}
+.hero__labels{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-60);margin-bottom:clamp(2rem,6vh,4rem)}
+.hero h1{
+  font-family:var(--font-display);font-weight:400;
+  font-size:clamp(2.6rem,7.2vw,7rem);line-height:1.02;letter-spacing:-.02em;
+  max-width:16ch}
+.hero h1 .it{font-style:italic;font-weight:300;color:var(--accent)}
+.hero h1 .wm{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em;margin-bottom:-.08em}
+.hero h1 .ww{display:inline-block;will-change:transform}
+.hero__foot{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;flex-wrap:wrap;
+  margin-top:clamp(2.5rem,7vh,5rem)}
+.hero__sub{max-width:34ch;font-size:clamp(.95rem,1.2vw,1.1rem);color:var(--ink-60)}
+.hero__ctas{display:flex;gap:1rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.6rem;border:1px solid var(--ink);border-radius:99px;
+  padding:.85rem 1.7rem;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  position:relative;overflow:hidden;isolation:isolate;transition:color .4s var(--ease)}
+.btn i{width:7px;height:7px;border-radius:50%;background:currentColor;transition:transform .4s var(--ease)}
+.btn::before{content:"";position:absolute;inset:0;background:var(--ink);z-index:-1;
+  transform:translateY(101%);transition:transform .5s var(--ease);border-radius:inherit}
+.btn:hover{color:var(--paper)}
+.btn:hover::before{transform:translateY(0)}
+.btn--solid{background:var(--ink);color:var(--paper)}
+.btn--solid::before{background:var(--accent)}
+.hero__scroll{position:absolute;top:50%;right:var(--gutter);transform:rotate(90deg) translateX(-50%);transform-origin:right;
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-30);
+  display:flex;align-items:center;gap:.8rem}
+.hero__scroll::after{content:"";width:60px;height:1px;background:var(--ink-30);animation:pulseline 2.2s var(--ease) infinite}
+@keyframes pulseline{0%,100%{transform:scaleX(.3);opacity:.4}50%{transform:scaleX(1);opacity:1}}
+@media (max-width:760px){.hero__scroll{display:none}}
+
+/* ---------- marquee ---------- */
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  overflow:hidden;padding:1.1rem 0;white-space:nowrap;background:var(--paper)}
+.marquee__track{display:inline-flex;will-change:transform}
+.marquee__item{display:inline-flex;align-items:center;gap:2.4rem;padding-right:2.4rem;
+  font-family:var(--font-display);font-weight:400;font-size:clamp(1.2rem,2.4vw,2rem);letter-spacing:-.01em}
+.marquee__item .star{color:var(--accent);font-style:normal;font-size:.8em}
+
+/* ---------- section shell ---------- */
+.section{padding:clamp(6rem,14vh,11rem) var(--gutter)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  border-bottom:1px solid var(--line);padding-bottom:1.2rem;margin-bottom:clamp(2.5rem,6vh,4.5rem)}
+.sec-head h2{font-family:var(--font-display);font-weight:400;font-size:clamp(2rem,4.6vw,4rem);letter-spacing:-.02em;line-height:1.05}
+.sec-head .mono{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60)}
+
+/* ---------- work index ---------- */
+.index-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(1rem,3vw,2.5rem);
+  padding:clamp(1.6rem,3.5vh,2.6rem) 0;border-bottom:1px solid var(--line);position:relative}
+.index-row__num{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.15em;color:var(--ink-30);transition:color .4s}
+.index-row__name{font-family:var(--font-display);font-weight:400;letter-spacing:-.02em;line-height:1;
+  font-size:clamp(1.9rem,4.6vw,4.2rem);transition:transform .5s var(--ease),color .4s;display:flex;align-items:baseline;gap:1.2rem;flex-wrap:wrap}
+.index-row__role{font-family:var(--font-body);font-size:.8rem;color:var(--ink-60);letter-spacing:0;font-weight:400}
+.index-row__arrow{font-family:var(--font-display);font-size:1.6rem;transform:translateX(-8px) rotate(-45deg);opacity:0;transition:all .5s var(--ease);color:var(--accent)}
+.index-row::before{content:"";position:absolute;inset:0;background:var(--paper-2);transform:scaleY(0);transform-origin:bottom;transition:transform .5s var(--ease);z-index:-1}
+.index-row:hover::before{transform:scaleY(1)}
+.index-row:hover .index-row__name{transform:translateX(1.4rem)}
+.index-row:hover .index-row__num{color:var(--accent)}
+.index-row:hover .index-row__arrow{opacity:1;transform:translateX(0) rotate(0)}
+@media (max-width:760px){.index-row{grid-template-columns:auto 1fr}.index-row__arrow{display:none}}
+
+/* ---------- case ---------- */
+.case{border-top:1px solid var(--line)}
+.case__grid{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(1.5rem,3vw,3rem)}
+.case__meta{grid-column:1/5;position:sticky;top:6rem;align-self:start}
+.case__num{font-family:var(--font-display);font-weight:300;font-size:clamp(4rem,8vw,7.5rem);line-height:1;
+  color:transparent;-webkit-text-stroke:1.5px var(--ink-30);display:block}
+.case__org{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);margin-top:1.4rem;display:block}
+.case__role{font-family:var(--font-display);font-size:clamp(1.5rem,2.4vw,2.2rem);font-weight:400;letter-spacing:-.01em;line-height:1.15;margin-top:.5rem}
+.case__facts{margin-top:1.8rem;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;color:var(--ink-60);display:grid;gap:.5rem}
+.case__facts span{display:flex;gap:.7rem;align-items:baseline}
+.case__facts b{font-weight:400;color:var(--accent)}
+.case__body{grid-column:6/13}
+.case__body h3{font-family:var(--font-display);font-weight:400;font-size:clamp(2rem,4vw,3.4rem);letter-spacing:-.02em;line-height:1.05;margin-bottom:1.6rem}
+.case__body h3 .it{font-style:italic;font-weight:300;color:var(--accent)}
+.case__body p{max-width:56ch;color:var(--ink-60);margin-bottom:1.2rem;font-size:clamp(.98rem,1.15vw,1.08rem)}
+.case__note{border-left:2px solid var(--accent);padding-left:1.2rem;margin:2rem 0;
+  font-family:var(--font-display);font-style:italic;font-weight:300;font-size:clamp(1.05rem,1.5vw,1.3rem);color:var(--ink)}
+.case__imgs{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,2.5vw,2rem);margin-top:2.5rem}
+.case__imgs figure{overflow:hidden;background:var(--paper-2)}
+.case__imgs figure:first-child:nth-last-child(1){grid-column:1/-1;aspect-ratio:16/9}
+.case__imgs img{width:100%;height:110%;object-fit:cover;will-change:transform;transform:scale(1.06)}
+.case__imgs figcaption{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.12em;color:var(--ink-60);
+  padding:.8rem 0 0;background:var(--paper)}
+.logos{margin-top:2.6rem}
+.logos__label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);margin-bottom:1rem}
+.logos__row{display:flex;flex-wrap:wrap;gap:clamp(1.4rem,3vw,2.8rem);align-items:center}
+.logos__row img{height:26px;width:auto;filter:grayscale(1) contrast(1.05);opacity:.75;transition:filter .4s,opacity .4s,transform .4s var(--ease)}
+.logos__row img:hover{filter:none;opacity:1;transform:translateY(-3px)}
+@media (max-width:900px){
+  .case__meta{grid-column:1/-1;position:static;display:grid;grid-template-columns:auto 1fr;gap:0 2rem;align-items:start}
+  .case__body{grid-column:1/-1}
+  .case__imgs{grid-template-columns:1fr}
+}
+
+/* ---------- stats ---------- */
+.stats{border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:clamp(2.5rem,6vh,4.5rem) var(--gutter);border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat__value{font-family:var(--font-display);font-weight:400;font-size:clamp(2.6rem,5.5vw,5rem);line-height:1;letter-spacing:-.02em;display:flex;align-items:baseline}
+.stat__value em{font-style:normal;color:var(--accent);font-size:.5em;margin-left:.15em}
+.stat__label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60);margin-top:1rem;max-width:18ch}
+@media (max-width:900px){.stats{grid-template-columns:1fr 1fr}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+
+/* ---------- about ---------- */
+.about__lead{font-family:var(--font-display);font-weight:300;font-size:clamp(1.6rem,3.6vw,3.2rem);
+  line-height:1.25;letter-spacing:-.01em;max-width:26ch}
+.about__lead .w{opacity:.14;transition:opacity .1s linear}
+.about__cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,6rem);margin-top:clamp(3rem,8vh,6rem)}
+.about h4{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);
+  border-bottom:1px solid var(--line);padding-bottom:.9rem;margin-bottom:1.4rem}
+.edu{padding:1.3rem 0;border-bottom:1px solid var(--line)}
+.edu__period{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;color:var(--accent)}
+.edu__school{font-family:var(--font-display);font-size:1.25rem;font-weight:500;margin-top:.4rem}
+.edu__degree{color:var(--ink-60);font-size:.92rem;margin-top:.2rem}
+.lang{display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--line)}
+.lang__name{font-family:var(--font-display);font-size:1.15rem;font-weight:400}
+.lang__level{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60)}
+@media (max-width:900px){.about__cols{grid-template-columns:1fr}}
+
+/* ---------- awards (dark) ---------- */
+.dark{background:var(--dark);color:var(--dark-paper)}
+.dark .sec-head{border-color:var(--dark-line)}
+.dark .sec-head .mono{color:var(--dark-60)}
+.award-row{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(1rem,3vw,2.5rem);align-items:baseline;
+  padding:1.6rem 0;border-bottom:1px solid var(--dark-line);position:relative}
+.award-row__idx{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.15em;color:var(--dark-60)}
+.award-row__name{font-family:var(--font-display);font-weight:400;font-size:clamp(1.4rem,2.8vw,2.4rem);letter-spacing:-.015em;line-height:1.1;transition:transform .45s var(--ease),color .45s}
+.award-row__detail{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dark-60);text-align:right}
+.award-row:hover .award-row__name{transform:translateX(1.2rem);color:var(--accent)}
+.award-preview{position:fixed;top:0;left:0;width:min(300px,26vw);aspect-ratio:4/3;z-index:900;pointer-events:none;
+  overflow:hidden;opacity:0;transform:translate(-50%,-50%) scale(.8) rotate(-4deg)}
+.award-preview img{width:100%;height:100%;object-fit:cover}
+@media (hover:none){.award-preview{display:none}}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1rem,2.5vw,2rem);margin-top:clamp(3rem,7vh,5rem)}
+.gallery figure{overflow:hidden;background:#1c1a1c}
+.gallery figure:nth-child(2){transform:translateY(clamp(1rem,4vh,3rem))}
+.gallery figure:nth-child(3){transform:translateY(clamp(2rem,8vh,6rem))}
+.gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;transform:scale(1.08);will-change:transform;
+  filter:grayscale(.35);transition:filter .6s}
+.gallery figure:hover img{filter:grayscale(0)}
+.gallery figcaption{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.1em;color:var(--dark-60);padding:.9rem 0 0}
+@media (max-width:900px){.gallery{grid-template-columns:1fr 1fr}.gallery figure:nth-child(n){transform:none}}
+
+/* ---------- contact ---------- */
+.contact{min-height:88svh;display:flex;flex-direction:column;justify-content:center;text-align:left}
+.contact .mono{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-60)}
+.contact h2{font-family:var(--font-display);font-weight:400;letter-spacing:-.025em;line-height:.98;
+  font-size:clamp(3.4rem,11vw,11rem);margin:1.5rem 0 2.5rem}
+.contact h2 .it{font-style:italic;font-weight:300;color:var(--accent)}
+.contact__row{display:flex;gap:1rem;flex-wrap:wrap}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:2rem var(--gutter);
+  display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;
+  font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-60)}
+footer a{position:relative}
+footer a:hover{color:var(--accent)}
+.top-link{display:inline-flex;align-items:center;gap:.5rem}
+
+/* ---------- reveal helpers ---------- */
+[data-fade]{opacity:0;transform:translateY(36px)}
+.split .wm{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.1em;margin-bottom:-.1em}
+.split .ww{display:inline-block;will-change:transform}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  [data-fade]{opacity:1;transform:none}
+  .split .ww,.hero h1 .ww{transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+<div class="award-preview"><img src="photos/world-future-awards-2024.jpg" alt="" /></div>
+
+<div class="loader" id="loader">
+  <div class="loader__name"><span>Olivier Plante</span></div>
+  <div class="loader__count" id="loadCount">00</div>
+  <div class="loader__bar"><i id="loadBar"></i></div>
+</div>
+<div class="loader__panels" id="loadPanels"><div></div><div></div><div></div><div></div><div></div></div>
+
+<header class="nav">
+  <a class="nav__name" href="#top" data-scroll>Olivier Plante</a>
+  <nav class="nav__links">
+    <a href="#work" data-scroll>Work</a>
+    <a href="#about" data-scroll>About</a>
+    <a href="#awards" data-scroll>Awards</a>
+    <a href="#contact" data-scroll class="nav__cta">Book a meeting</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__labels">
+      <span data-fade>Olivier Plante — London</span>
+      <span data-fade>Product · Input · Interfaces</span>
+      <span data-fade>Folio 2026</span>
+    </div>
+    <h1 id="heroTitle">Product manager for <em class="it">input,</em> operating systems, <em class="it">and</em> interfaces.</h1>
+    <div class="hero__foot">
+      <p class="hero__sub" data-fade>Fourteen years shipping input technologies, mobile keyboards, and operating-system software — from roadmap to user stories to the team that ships it.</p>
+      <div class="hero__ctas" data-fade>
+        <a class="btn btn--solid magnetic" href="https://calendar.app.google/juht3wf6qkvNojcY9" target="_blank" rel="noopener"><i></i>Book a meeting ↗</a>
+        <a class="btn magnetic" href="https://www.linkedin.com/in/olivierplante" target="_blank" rel="noopener"><i></i>LinkedIn ↗</a>
+      </div>
+    </div>
+    <div class="hero__scroll">Scroll</div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track" id="marqueeTrack">
+      <span class="marquee__item">Input systems <i class="star">✦</i></span>
+      <span class="marquee__item">Operating systems <i class="star">✦</i></span>
+      <span class="marquee__item">Human–computer interfaces <i class="star">✦</i></span>
+      <span class="marquee__item">Product strategy <i class="star">✦</i></span>
+      <span class="marquee__item">Design systems <i class="star">✦</i></span>
+      <span class="marquee__item">Team leadership <i class="star">✦</i></span>
+    </div>
+  </div>
+
+  <!-- WORK INDEX -->
+  <section class="section" id="work">
+    <div class="sec-head">
+      <h2 class="split">Selected Work</h2>
+      <span class="mono" data-fade>2011 — Present</span>
+    </div>
+    <a class="index-row" href="#case-snap" data-scroll data-hover>
+      <span class="index-row__num">01</span>
+      <span class="index-row__name">Snap <span class="index-row__role">Product Manager · June 2025 — Present</span></span>
+      <span class="index-row__arrow">→</span>
+    </a>
+    <a class="index-row" href="#case-fleksy" data-scroll data-hover>
+      <span class="index-row__num">02</span>
+      <span class="index-row__name">Fleksy <span class="index-row__role">Co-founder, Head of Product &amp; CEO · 2015 — 2025</span></span>
+      <span class="index-row__arrow">→</span>
+    </a>
+    <a class="index-row" href="#case-innova" data-scroll data-hover>
+      <span class="index-row__num">03</span>
+      <span class="index-row__name">Innova Partners <span class="index-row__role">Co-founder &amp; Product Lead · 2011 — 2015</span></span>
+      <span class="index-row__arrow">→</span>
+    </a>
+    <a class="index-row" href="#case-thesis" data-scroll data-hover>
+      <span class="index-row__num">04</span>
+      <span class="index-row__name">Montreal Airport Thesis <span class="index-row__role">Master's in Design and Complexity · 2009 — 2011</span></span>
+      <span class="index-row__arrow">→</span>
+    </a>
+  </section>
+
+  <!-- CASE 01 — SNAP -->
+  <section class="section case" id="case-snap">
+    <div class="case__grid">
+      <div class="case__meta" data-fade>
+        <span class="case__num">01</span>
+        <span class="case__org">Snap Inc.</span>
+        <div class="case__role">Product Manager</div>
+        <div class="case__facts">
+          <span><b>When</b> June 2025 — Present</span>
+          <span><b>Where</b> London</span>
+        </div>
+      </div>
+      <div class="case__body">
+        <h3 class="split">Input, peripherals <em class="it">and the</em> OS layer.</h3>
+        <p data-fade>I own product direction across input and peripherals, design systems, the operating system layer, and brain-computer interface work. I define that direction, write the user stories, and lead engineering through the week.</p>
+        <p data-fade>The roadmap stays tied to the person using the product, not to output for its own sake. Progress, trade-offs, and evidence go to stakeholders so decisions rest on data.</p>
+        <div class="case__imgs">
+          <figure data-parallax><img src="photos/snap-glasses.jpg" alt="A hand using a transparent glasses interface beside a pool." /></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASE 02 — FLEKSY -->
+  <section class="section case" id="case-fleksy">
+    <div class="case__grid">
+      <div class="case__meta" data-fade>
+        <span class="case__num">02</span>
+        <span class="case__org">Thingthing Ltd</span>
+        <div class="case__role">Co-founder, Head of Product &amp; CEO</div>
+        <div class="case__facts">
+          <span><b>When</b> March 2015 — June 2025</span>
+          <span><b>Where</b> Barcelona</span>
+        </div>
+      </div>
+      <div class="case__body">
+        <h3 class="split">A keyboard <em class="it">used by</em> five million people a day.</h3>
+        <p data-fade>I owned the roadmap and the growth of Fleksy, a keyboard and input product that reached 5 million daily active users. I closed $15 million in deals across AI, healthcare, banking, OEMs, mobile apps, and logistics, and kept the consumer roadmap next to what OEM and business clients needed.</p>
+        <p data-fade>I shipped features from concept to release, and stayed close to UX strategy, market analysis, and prioritization. I built and led a remote product and engineering team: hiring, management frameworks, and goals tied to product outcomes.</p>
+        <div class="case__note" data-fade>From October 2018 to September 2022 I also advised other startups on fundraising, what they were offering, how they would reach people, and how they pitched.</div>
+        <div class="case__imgs">
+          <figure data-parallax><img src="photos/fleksy-sdk.jpg" alt="Fleksy SDK developer platform graphic, with a phone showing a keyboard." /></figure>
+          <figure data-parallax><img src="photos/fleksy-apps.jpg" alt="Fleksy apps keyboard in a chat, with a row of app icons." /></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASE 03 — INNOVA -->
+  <section class="section case" id="case-innova">
+    <div class="case__grid">
+      <div class="case__meta" data-fade>
+        <span class="case__num">03</span>
+        <span class="case__org">Innova Partners &amp; Creator Street</span>
+        <div class="case__role">Co-founder &amp; Product Lead</div>
+        <div class="case__facts">
+          <span><b>When</b> June 2011 — March 2015</span>
+          <span><b>Where</b> Barcelona</span>
+        </div>
+      </div>
+      <div class="case__body">
+        <h3 class="split">From post-it ideation <em class="it">to</em> shipped code.</h3>
+        <p data-fade>I co-ran a boutique innovation consultancy. Projects went from post-it ideation to shipped code. I managed client products across research, design, and engineering, often several enterprise clients in parallel.</p>
+        <p data-fade>I ran more than 300 user-centered workshops and wrote more than 100 research proposals, for digital products used by roughly 200 million people. We created product lines in banking, media, location-based services, logistics, and healthcare.</p>
+        <div class="logos" data-fade>
+          <div class="logos__label">Selected clients</div>
+          <div class="logos__row">
+            <img src="logos/axa.svg" alt="AXA" />
+            <img src="logos/orange.svg" alt="Orange" />
+            <img src="logos/bnp-paribas.svg" alt="BNP Paribas" />
+            <img src="logos/sfr.svg" alt="SFR" />
+            <img src="logos/sita.svg" alt="SITA" />
+            <img src="logos/sanoma.png" alt="Sanoma" />
+          </div>
+        </div>
+        <div class="case__imgs">
+          <figure data-parallax><img src="photos/workshop-paper-phone.jpg" alt="Hands holding a paper phone while someone sketches a screen on a worksheet." /><figcaption>Paper prototype at an Innova Partners workshop.</figcaption></figure>
+          <figure data-parallax><img src="photos/workshop-notes.jpg" alt="A workshop table covered with journey maps, sticky notes, and printed screens." /><figcaption>Workshop notes from Innova Partners.</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASE 04 — THESIS -->
+  <section class="section case" id="case-thesis">
+    <div class="case__grid">
+      <div class="case__meta" data-fade>
+        <span class="case__num">04</span>
+        <span class="case__org">University of Montreal</span>
+        <div class="case__role">Master's in Design and Complexity</div>
+        <div class="case__facts">
+          <span><b>When</b> September 2009 — June 2011</span>
+          <span><b>Where</b> Montreal</span>
+        </div>
+      </div>
+      <div class="case__body">
+        <h3 class="split">Place, Time <em class="it">and</em> Awareness.</h3>
+        <p data-fade>The thesis, Place, Time and Awareness, is on improving the airport experience through mobile platforms. With Aéroports de Montréal and Tourism Montreal I built a full passenger-experience proof of concept.</p>
+        <p data-fade>I was a teaching assistant in 3D modeling, interface, and UX design.</p>
+        <div class="logos" data-fade>
+          <div class="logos__label">Thesis partners</div>
+          <div class="logos__row">
+            <img src="logos/universite-de-montreal.svg" alt="Université de Montréal" />
+            <img src="logos/aeroports-de-montreal.png" alt="Aéroports de Montréal" />
+            <img src="logos/tourisme-montreal.svg" alt="Tourisme Montréal" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats" id="numbers">
+    <div class="stat"><div class="stat__value"><span class="count" data-count="5">0</span><em>M</em></div><div class="stat__label">Daily active users on Fleksy</div></div>
+    <div class="stat"><div class="stat__value"><em>$</em><span class="count" data-count="15">0</span><em>M</em></div><div class="stat__label">Deals closed across six industries</div></div>
+    <div class="stat"><div class="stat__value"><span class="count" data-count="300">0</span><em>+</em></div><div class="stat__label">User-centered workshops run</div></div>
+    <div class="stat"><div class="stat__value"><span class="count" data-count="200">0</span><em>M</em></div><div class="stat__label">People using products shaped</div></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="sec-head">
+      <h2 class="split">About</h2>
+      <span class="mono" data-fade>London, United Kingdom</span>
+    </div>
+    <p class="about__lead" id="aboutLead">I take a product from the roadmap to the user stories to the team that ships it — and I keep the person using it at the center of every trade-off.</p>
+    <div class="about__cols">
+      <div data-fade>
+        <h4>Education</h4>
+        <div class="edu"><div class="edu__period">2009 — 2011</div><div class="edu__school">University of Montreal</div><div class="edu__degree">Master's in Design and Complexity</div></div>
+        <div class="edu"><div class="edu__period">2005 — 2009</div><div class="edu__school">University of Montreal</div><div class="edu__degree">Bachelor in Industrial Design — elected president of the School of Design for two terms</div></div>
+        <div class="edu"><div class="edu__period">2010 — 2011</div><div class="edu__school">Universitat Pompeu Fabra, Barcelona</div><div class="edu__degree">Visiting student in computer science — cognitive science, psychology, human-machine interaction</div></div>
+      </div>
+      <div data-fade>
+        <h4>Languages</h4>
+        <div class="lang"><span class="lang__name">Canadian French</span><span class="lang__level">Native</span></div>
+        <div class="lang"><span class="lang__name">English</span><span class="lang__level">Native, fluent</span></div>
+        <div class="lang"><span class="lang__name">Spanish</span><span class="lang__level">Proficient</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AWARDS -->
+  <section class="section dark" id="awards">
+    <div class="sec-head">
+      <h2 class="split">Awards &amp; Recognition</h2>
+      <span class="mono" data-fade>2016 — 2024</span>
+    </div>
+    <div class="award-row" data-hover data-img="photos/world-future-awards-2024.jpg">
+      <span class="award-row__idx">A·01</span>
+      <span class="award-row__name">World Future Awards</span>
+      <span class="award-row__detail">Best Text Input Solutions, 2024</span>
+    </div>
+    <div class="award-row" data-hover data-img="photos/innovate-uk-2024.jpg">
+      <span class="award-row__idx">A·02</span>
+      <span class="award-row__name">Innovate UK &amp; UKRI</span>
+      <span class="award-row__detail">Grant, January 2024</span>
+    </div>
+    <div class="award-row" data-hover data-img="photos/govtech-pioneers-2018-cheque.jpg">
+      <span class="award-row__idx">A·03</span>
+      <span class="award-row__name">GovTech Pioneers</span>
+      <span class="award-row__detail">Challenge Award, Vienna 2018</span>
+    </div>
+    <div class="award-row" data-hover data-img="photos/govtech-pioneers-2018-final-four.jpg">
+      <span class="award-row__idx">A·04</span>
+      <span class="award-row__name">GSMA</span>
+      <span class="award-row__detail">Mobile World Congress</span>
+    </div>
+    <div class="award-row" data-hover data-img="photos/4yfn-2016.jpg">
+      <span class="award-row__idx">A·05</span>
+      <span class="award-row__name">4YFN — The Europas</span>
+      <span class="award-row__detail">Disrupted by Mobile, 2016</span>
+    </div>
+    <div class="award-row" data-hover data-img="photos/govtech-pioneers-2018-pitch.jpg">
+      <span class="award-row__idx">A·06</span>
+      <span class="award-row__name">Betahaus</span>
+      <span class="award-row__detail">Pitch stage</span>
+    </div>
+    <div class="gallery">
+      <figure data-parallax><img src="photos/world-future-awards-2024.jpg" alt="Congratulatory letter from World Future Awards 2024 to the Fleksy team." /><figcaption>World Future Awards 2024 — Best Text Input Solutions for Diverse Enterprise Applications.</figcaption></figure>
+      <figure data-parallax><img src="photos/govtech-pioneers-2018-pitch.jpg" alt="Olivier Plante speaking into a microphone on the GovTech Pioneers stage in Vienna." /><figcaption>Pitching at Palais Wertheim, Vienna, 2018.</figcaption></figure>
+      <figure data-parallax><img src="photos/4yfn-2016.jpg" alt="Olivier Plante seated at 4YFN 2016, wearing a conference badge." /><figcaption>4YFN 2016, Disrupted by Mobile.</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section contact" id="contact">
+    <span class="mono" data-fade>Contact — London</span>
+    <h2><span class="split" style="display:block">Let's build what</span><span class="split" style="display:block"><em class="it">people touch.</em></span></h2>
+    <div class="contact__row" data-fade>
+      <a class="btn btn--solid magnetic" href="https://calendar.app.google/juht3wf6qkvNojcY9" target="_blank" rel="noopener"><i></i>Book a meeting ↗</a>
+      <a class="btn magnetic" href="https://www.linkedin.com/in/olivierplante" target="_blank" rel="noopener"><i></i>LinkedIn ↗</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>© 2026 Olivier Plante — London</span>
+  <a href="https://www.linkedin.com/in/olivierplante" target="_blank" rel="noopener" data-hover>LinkedIn ↗</a>
+  <a href="#top" data-scroll data-hover class="top-link">Back to top ↑</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+(function(){
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- Lenis smooth scroll ---------- */
+  let lenis = null;
+  if (!reduced && typeof Lenis !== 'undefined') {
+    lenis = new Lenis({ duration: 1.15, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+  function scrollTo(target){
+    if (lenis) lenis.scrollTo(target, { offset: 0, duration: 1.4 });
+    else document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
+  }
+  document.querySelectorAll('[data-scroll]').forEach(a => {
+    a.addEventListener('click', e => {
+      const href = a.getAttribute('href');
+      if (href && href.startsWith('#')) { e.preventDefault(); scrollTo(href === '#top' ? 0 : href); }
+    });
+  });
+
+  /* ---------- word splitter ---------- */
+  function splitWords(el){
+    const walk = node => {
+      [...node.childNodes].forEach(child => {
+        if (child.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach(part => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+            const mask = document.createElement('span'); mask.className = 'wm';
+            const word = document.createElement('span'); word.className = 'ww'; word.textContent = part;
+            mask.appendChild(word); frag.appendChild(mask);
+          });
+          node.replaceChild(frag, child);
+        } else if (child.nodeType === 1) walk(child);
+      });
+    };
+    walk(el);
+    return el.querySelectorAll('.ww');
+  }
+
+  const heroWords = splitWords(document.getElementById('heroTitle'));
+  gsap.set(heroWords, { yPercent: 115 });
+  document.querySelectorAll('.split').forEach(el => {
+    const words = splitWords(el);
+    gsap.set(words, { yPercent: 115 });
+    gsap.to(words, {
+      yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: 0.045,
+      scrollTrigger: { trigger: el, start: 'top 88%' }
+    });
+  });
+
+  /* ---------- loader sequence ---------- */
+  const loader = document.getElementById('loader');
+  const panels = document.querySelectorAll('#loadPanels div');
+  const countEl = document.getElementById('loadCount');
+  const barEl = document.getElementById('loadBar');
+  document.body.style.overflow = 'hidden';
+  if (lenis) lenis.stop();
+
+  function finishLoad(){
+    document.body.style.overflow = '';
+    if (lenis) lenis.start();
+  }
+  if (reduced) {
+    loader.style.display = 'none';
+    document.getElementById('loadPanels').style.display = 'none';
+    gsap.set(heroWords, { yPercent: 0 });
+    finishLoad();
+  } else {
+    const counter = { v: 0 };
+    const tl = gsap.timeline({ onComplete: finishLoad });
+    tl.to('.loader__name span', { y: 0, duration: .9, ease: 'power4.out' }, 0)
+      .to(counter, {
+        v: 100, duration: 1.6, ease: 'power2.inOut',
+        onUpdate(){ 
+          const n = Math.round(counter.v);
+          countEl.textContent = String(n).padStart(2, '0');
+          barEl.style.width = n + '%';
+        }
+      }, 0)
+      .to('.loader__name span', { y: '-110%', duration: .7, ease: 'power4.in' }, 1.7)
+      .to(loader, { yPercent: -100, duration: .9, ease: 'power4.inOut' }, 2.1)
+      .to(panels, { scaleY: 0, duration: .9, ease: 'power4.inOut', stagger: 0.06 }, 2.25)
+      .to(heroWords, { yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.05 }, 2.55)
+      .set([loader, '#loadPanels'], { display: 'none' });
+  }
+
+  /* ---------- generic fade reveals ---------- */
+  document.querySelectorAll('[data-fade]').forEach(el => {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 90%' }
+    });
+  });
+
+  /* ---------- parallax figures ---------- */
+  if (!reduced) {
+    document.querySelectorAll('[data-parallax] img').forEach(img => {
+      gsap.fromTo(img, { yPercent: -6 }, {
+        yPercent: 6, ease: 'none',
+        scrollTrigger: { trigger: img.closest('figure'), start: 'top bottom', end: 'bottom top', scrub: true }
+      });
+    });
+    /* hero drifts up as you scroll away */
+    gsap.to('.hero h1', {
+      yPercent: -18, opacity: .25, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+    });
+  }
+
+  /* ---------- marquee: infinite + velocity skew ---------- */
+  const track = document.getElementById('marqueeTrack');
+  track.innerHTML += track.innerHTML + track.innerHTML;
+  const marqueeTween = gsap.to(track, { xPercent: -33.333, ease: 'none', duration: 24, repeat: -1 });
+  const skewState = { mq: 0, hero: 0 };
+  const skewSetter = gsap.quickSetter('.marquee__item', 'skewX', 'deg');
+  const heroSkew = gsap.quickSetter('#heroTitle', 'skewY', 'deg');
+  if (lenis && !reduced) {
+    lenis.on('scroll', ({ velocity }) => {
+      skewState.mq = gsap.utils.clamp(-8, 8, velocity * 0.3);
+      skewState.hero = gsap.utils.clamp(-2.5, 2.5, velocity * 0.06);
+      marqueeTween.timeScale(1 + Math.min(Math.abs(velocity) * 0.08, 3));
+    });
+    gsap.ticker.add(() => {
+      skewState.mq *= 0.92;
+      skewState.hero *= 0.9;
+      marqueeTween.timeScale(gsap.utils.interpolate(marqueeTween.timeScale(), 1, 0.05));
+      skewSetter(skewState.mq);
+      heroSkew(skewState.hero);
+    });
+  }
+
+  /* ---------- stats count-up ---------- */
+  document.querySelectorAll('.count').forEach(el => {
+    const target = +el.dataset.count;
+    const obj = { v: 0 };
+    ScrollTrigger.create({
+      trigger: el, start: 'top 85%', once: true,
+      onEnter(){ gsap.to(obj, { v: target, duration: 1.8, ease: 'power3.out', onUpdate(){ el.textContent = Math.round(obj.v); } }); }
+    });
+  });
+
+  /* ---------- about lead: scrub word opacity ---------- */
+  const lead = document.getElementById('aboutLead');
+  lead.innerHTML = lead.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
+  gsap.to('#aboutLead .w', {
+    opacity: 1, stagger: 0.06, ease: 'none',
+    scrollTrigger: { trigger: lead, start: 'top 80%', end: 'bottom 45%', scrub: true }
+  });
+
+  /* ---------- nav background on scroll ---------- */
+  const navEl = document.querySelector('.nav');
+  const toggleNav = () => navEl.classList.toggle('is-scrolled', window.scrollY > 60);
+  window.addEventListener('scroll', toggleNav, { passive: true });
+  toggleNav();
+
+  /* ---------- custom cursor ---------- */
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  if (window.matchMedia('(hover:hover)').matches) {
+    const dx = gsap.quickTo(dot, 'x', { duration: .05, ease: 'none' });
+    const dy = gsap.quickTo(dot, 'y', { duration: .05, ease: 'none' });
+    const rx = gsap.quickTo(ring, 'x', { duration: .22, ease: 'power2.out' });
+    const ry = gsap.quickTo(ring, 'y', { duration: .22, ease: 'power2.out' });
+    window.addEventListener('mousemove', e => { dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY); });
+    document.querySelectorAll('a, [data-hover], button').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('is-hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('is-hover'));
+    });
+    window.addEventListener('mousedown', () => ring.classList.add('is-down'));
+    window.addEventListener('mouseup', () => ring.classList.remove('is-down'));
+  }
+
+  /* ---------- magnetic buttons ---------- */
+  if (window.matchMedia('(hover:hover)').matches && !reduced) {
+    document.querySelectorAll('.magnetic').forEach(btn => {
+      const mx = gsap.quickTo(btn, 'x', { duration: .4, ease: 'power3.out' });
+      const my = gsap.quickTo(btn, 'y', { duration: .4, ease: 'power3.out' });
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        mx((e.clientX - r.left - r.width / 2) * 0.35);
+        my((e.clientY - r.top - r.height / 2) * 0.45);
+      });
+      btn.addEventListener('mouseleave', () => { mx(0); my(0); });
+    });
+  }
+
+  /* ---------- award hover preview follows cursor ---------- */
+  const preview = document.querySelector('.award-preview');
+  const previewImg = preview.querySelector('img');
+  if (window.matchMedia('(hover:hover)').matches) {
+    const px = gsap.quickTo(preview, 'x', { duration: .5, ease: 'power3.out' });
+    const py = gsap.quickTo(preview, 'y', { duration: .5, ease: 'power3.out' });
+    let hoverRow = null, lastX = 0, lastY = 0, previewShown = false;
+    const showPreview = () => {
+      if (previewShown) return;
+      previewShown = true;
+      gsap.to(preview, { opacity: 1, scale: 1, rotate: 0, duration: .5, ease: 'power3.out', overwrite: 'auto' });
+    };
+    const hidePreview = () => {
+      if (!previewShown) return;
+      previewShown = false;
+      gsap.to(preview, { opacity: 0, scale: .8, rotate: -4, duration: .35, ease: 'power3.in', overwrite: 'auto' });
+    };
+    window.addEventListener('mousemove', e => {
+      lastX = e.clientX; lastY = e.clientY;
+      px(lastX); py(lastY);
+      if (hoverRow) showPreview();
+    });
+    /* dismiss while scrolling so it never detaches from its row */
+    const onScrollHide = () => { if (previewShown) hidePreview(); };
+    window.addEventListener('scroll', onScrollHide, { passive: true });
+    if (lenis) lenis.on('scroll', onScrollHide);
+    /* keep it pinned to the cursor even if the page settles under it */
+    gsap.ticker.add(() => {
+      if (!previewShown || !hoverRow) return;
+      const el = document.elementFromPoint(lastX, lastY);
+      if (!el || !el.closest('.award-row')) hidePreview();
+    });
+    document.querySelectorAll('.award-row').forEach(row => {
+      row.addEventListener('mouseenter', e => {
+        hoverRow = row;
+        const src = row.dataset.img;
+        if (src && !previewImg.src.endsWith(src)) previewImg.src = src;
+        lastX = e.clientX; lastY = e.clientY;
+        px(lastX); py(lastY);
+        showPreview();
+      });
+      row.addEventListener('mouseleave', () => { hoverRow = null; hidePreview(); });
+    });
+  }
+
+  /* ---------- refresh triggers once media is in ---------- */
+  window.addEventListener('load', () => ScrollTrigger.refresh());
+  document.querySelectorAll('img').forEach(img => {
+    if (!img.complete) img.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
+  });
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => ScrollTrigger.refresh(), 200); });
+})();
+</script>
+<img src="https://librecounter.org/counter.svg" referrerPolicy="unsafe-url" width="0" height="0" alt="" style="position:absolute;width:0;height:0;border:0" />
+</body>
 </html>
